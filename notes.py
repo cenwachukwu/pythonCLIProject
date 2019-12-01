@@ -79,6 +79,7 @@ def view_note(name):
         print(result.date)
         print(result.title)
         print(result.notes)
+        
         view_another = input('Would you like to view another note? Y/N: ')
         if view_another == "y":
             view_note()
@@ -98,8 +99,8 @@ def create_note(name):
     title = input('Add a title for your new note: ')
     notes = input('Add some content to your note: ')
 
-    # next step to bind all the entries together to make a new note in the NoteTaker db
-    new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day))
+    # next step to bind all the entries together to make a new note in the NoteTaker db, we also call the name agruement as the name of the user
+    new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day), user=name)
 
     #next we save the new note like so:
     new_note.save() 
@@ -111,6 +112,15 @@ def create_note(name):
     # print(f"{new_note.title}") 
     print(f"{new_note.notes}")
     print("") #for space asthetics
+
+    #next we create a cycle, so we ask the user if they want to create a another note or view a note
+    create_another = input('Would you like to create another note or would you like to view notes? Enter create / view: ')
+    if create_another == 'create' :
+        create_note(name)
+    elif create_another == 'view' :
+        view_note(name)
+    else :
+        theNotes()
 
 #since we broke our code up into functions, we have to make a function to start our application
 def theNotes():
