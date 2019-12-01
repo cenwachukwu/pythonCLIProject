@@ -41,6 +41,7 @@ db.create_tables([NoteTaker, User])
 # creating interactive input logic for creating the data: 
 #initially, i didnt have this as a function but it makes more sense to have it as a function.
 #so we can have functions that serve as menu to view or create, creates new notes, and views notes or view particular notes
+#we also had to add the user, so we have to have a function that creates a user with the user table and adds it to the notetaker's user column
 def view_or_create(): 
     note = input("view note or create new note?: ")
     if note == 'view note':
@@ -50,6 +51,8 @@ def view_or_create():
 
 def view_note():
         searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
+        if searchEngine == 'view all':
+            result = NoteTaker.select()where(NoteTaker.user_name == username)
         result = NoteTaker.select().where(NoteTaker.title == searchEngine).get()     # Get/Select request to find a note by title
                     #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
                     #our first step to achieving crud.
