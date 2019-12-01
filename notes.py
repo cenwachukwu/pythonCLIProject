@@ -2,3 +2,8 @@
 #importing peewee
 from peewee import *
 from datetime import date 
+
+#Using the PostgresqlDatabase class to create a database connection, 
+#passing in the name of the database (in the case = notetaker), the user, the password, the host, and the port.
+db = PostgresqlDatabase('notetaker', user='postgres', password='',
+                        host='localhost', port=5432)
