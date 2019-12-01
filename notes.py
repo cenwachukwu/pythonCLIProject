@@ -45,3 +45,13 @@ if note == 'view note':
     print(result.date)
     print(result.title)
     print(result.notes)
+elif note == 'create new note':
+    #first step to creating a new note is to collect inputs 
+    # date input below is always year, date, month in that order, also because the date a num/integer, we wrap the input in int eg.
+    # int(input())
+    year = int(input('Enter the year like so (2012) '))
+    month = int(input('Enter the month number like so (for March type 3): '))
+    day = int(input('Enter the day number like so (21): '))
+    # we can also ask for date input like so: date = int(input(enter date like so (1990, 11, 18)))
+    title = input('Add a title for your new note: ')
+    notes = input('Add some content to your note: ')
