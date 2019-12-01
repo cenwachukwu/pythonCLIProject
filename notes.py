@@ -55,3 +55,17 @@ elif note == 'create new note':
     # we can also ask for date input like so: date = int(input(enter date like so (1990, 11, 18)))
     title = input('Add a title for your new note: ')
     notes = input('Add some content to your note: ')
+
+    # next step to bind all the entries together to make a new note in the NoteTaker db
+    new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day))
+
+    #next we save the new note like so:
+    new_note.save() 
+
+    #next we display our new note:
+    print("") #for space asthetics lol
+    print(new_note.date)
+    print(new_note.title)
+    # print(f"{new_note.title}") 
+    print(f"{new_note.notes}")
+    print("") #for space asthetics
