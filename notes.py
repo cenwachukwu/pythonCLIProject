@@ -56,14 +56,14 @@ def user():
         print(f'You have got {your_notes} notes.')
         return name
 
-def view_or_create(): 
+def view_or_create(name): 
     note = input("view note or create new note?: ")
     if note == 'view note':
-        view_note()
+        view_note(name)
     elif note == 'create new note':
-        create_note()
+        create_note(name)
 
-def view_note():
+def view_note(name):
     searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
         result = NoteTaker.select().where(NoteTaker.title == searchEngine).get()     # Get/Select request to find a note by title
                     #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
@@ -72,7 +72,7 @@ def view_note():
         print(result.title)
         print(result.notes)
 
-def create_note():
+def create_note(name):
     #first step to creating a new note is to collect inputs 
     # date input below is always year, date, month in that order, also because the date a num/integer, we wrap the input in int eg.
     # int(input())
