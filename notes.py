@@ -32,7 +32,8 @@ class NoteTaker(BaseModel):
         # both CharField() and DateField() are from PeeWee's datatypes. others are BooleanField(), IntegerField() etc.
         # CharField() basically means that both the title and note fields are strings and 
         # the DateField() means that the date field will take a date
- class User(BaseModel): #the requirement asked for users to be able to view all their notes or a particular note
+
+class User(BaseModel): #the requirement asked for users to be able to view all their notes or a particular note
      name = CharField() #in the functions below we would use their name as a filter in our select()
 
 #db.create_tables([NoteTaker]) to add this table to the database
@@ -42,6 +43,19 @@ db.create_tables([NoteTaker, User])
 #initially, i didnt have this as a function but it makes more sense to have it as a function.
 #so we can have functions that serve as menu to view or create, creates new notes, and views notes or view particular notes
 #we also had to add the user, so we have to have a function that creates a user with the user table and adds it to the notetaker's user column
+def user():
+    new_or_old_user = input("Are a new or returning user? new/returning: ")
+    if new_or_old_user == 'new':
+        name = input('Type in a user name: ')
+        new_user = User(name = name)
+        new_user.save()
+        return name
+    elif new_or_old_user = 'returning':
+        name = input('Type in your user name: ')
+        your_notes = NoteTaker.select().where(NoteTaker.name == name).count()
+        print(f'You have got {your_notes} notes.')
+        return name
+
 def view_or_create(): 
     note = input("view note or create new note?: ")
     if note == 'view note':
@@ -50,36 +64,35 @@ def view_or_create():
         create_note()
 
 def view_note():
-        searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
-        if searchEngine == 'view all':
-            result = NoteTaker.select()where(NoteTaker.user_name == username)
+    searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
         result = NoteTaker.select().where(NoteTaker.title == searchEngine).get()     # Get/Select request to find a note by title
                     #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
                     #our first step to achieving crud.
         print(result.date)
         print(result.title)
         print(result.notes)
-    elif note == 'create new note':
+
+def create_note():
     #first step to creating a new note is to collect inputs 
     # date input below is always year, date, month in that order, also because the date a num/integer, we wrap the input in int eg.
     # int(input())
-        year = int(input('Enter the year like so (2012) '))
-        month = int(input('Enter the month number like so (for March type 3): '))
-        day = int(input('Enter the day number like so (21): '))
+    year = int(input('Enter the year like so (2012) '))
+    month = int(input('Enter the month number like so (for March type 3): '))
+    day = int(input('Enter the day number like so (21): '))
     # we can also ask for date input like so: date = int(input(enter date like so (1990, 11, 18))) and to get date of present time(date = datetime.datetime.now())
-        title = input('Add a title for your new note: ')
-        notes = input('Add some content to your note: ')
+    title = input('Add a title for your new note: ')
+    notes = input('Add some content to your note: ')
 
     # next step to bind all the entries together to make a new note in the NoteTaker db
-        new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day))
+    new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day))
 
     #next we save the new note like so:
-        new_note.save() 
+    new_note.save() 
 
     #next we display our new note:
-        print("") #for space asthetics lol
-        print(new_note.date)
-        print(new_note.title)
+    print("") #for space asthetics lol
+    print(new_note.date)
+    print(new_note.title)
     # print(f"{new_note.title}") 
-        print(f"{new_note.notes}")
-        print("") #for space asthetics
+    print(f"{new_note.notes}")
+    print("") #for space asthetics
