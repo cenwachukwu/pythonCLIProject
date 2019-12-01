@@ -1,10 +1,10 @@
-#first after creating your directory and your file is to run {pipenv install psycopg2 then pipenv install} to install peewee in your file
+#first after creating your directory and your file is to run {pipenv install peewee then pipenv install psycopg2-binary} to install peewee in your file
 #importing peewee
 from peewee import *
 from datetime import date 
 
 #Using the PostgresqlDatabase class to create a database connection, 
-#passing in the name of the database (in the case = notetaker), the user, the password, the host, and the port.
+#passing in the name of the database (in the case = notetaker), the user (postgres), the password (blank), the host (localhost), and the port.
 db = PostgresqlDatabase('notetaker', user='postgres', password='',
                         host='localhost', port=5432)
 
@@ -31,3 +31,6 @@ class NoteTaker(BaseModel):
         # both CharField() and DateField() are from PeeWee's datatypes. others are BooleanField(), IntegerField() etc.
         # CharField() basically means that both the title and note fields are strings and 
         # the DateField() means that the date field will take a date
+
+#db.create_tables([NoteTaker]) to add this table to the database
+db.create_tables([NoteTaker])
