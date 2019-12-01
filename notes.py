@@ -67,17 +67,20 @@ def view_or_create(name):
 def view_note(name): 
     searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
     if searchEngine == 'view all':
-        all_user_notes = NoteTaker.select().where(NoteTaker.name == name).get() #how we get all the notes belonging to the user
+        all_user_notes = NoteTaker.select().where(NoteTaker.name == name) #how we get all the notes belonging to the user using select
         print(f'{NoteTaker.name}s notes: ')
         for notes in all_user_notes: #we use a for loop to loop/map through the notes belonging to the user and print it
             print(f'{note.date}\n{note.title}\n{note.note}') #\n makes the entry go down to the next line
     else :
-        result = NoteTaker.select().where(NoteTaker.title == searchEngine).get()     # Get/Select request to find a note by title
-                    #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
+        result = NoteTaker.get(NoteTaker.title == searchEngine, NoteTaker.name == name)     
+                    #{Get} search finds a single data while {select} finds multiple
+                    #above we search by note title and by the user name for a strict single result search.
                     #our first step to achieving crud.
         print(result.date)
         print(result.title)
         print(result.notes)
+
+        
 
 def create_note(name):
     #first step to creating a new note is to collect inputs 
