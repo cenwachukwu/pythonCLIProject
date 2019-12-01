@@ -7,3 +7,6 @@ from datetime import date
 #passing in the name of the database (in the case = notetaker), the user, the password, the host, and the port.
 db = PostgresqlDatabase('notetaker', user='postgres', password='',
                         host='localhost', port=5432)
+
+#Use db.connect() to actually connect to the database
+db.connect()
