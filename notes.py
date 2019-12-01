@@ -5,7 +5,7 @@ from datetime import date
 
 #Using the PostgresqlDatabase class to create a database connection, 
 #passing in the name of the database (in the case = notetaker), the user (postgres), the password (blank), the host (localhost), and the port.
-db = PostgresqlDatabase('notetaker', user='postgres', password='',
+db = PostgresqlDatabase('notetaker2', user='postgres', password='',
                         host='localhost', port=5432)
 
 #Use db.connect() to actually connect to the database
@@ -34,7 +34,7 @@ class NoteTaker(BaseModel):
         # the DateField() means that the date field will take a date
 
 class User(BaseModel): #the requirement asked for users to be able to view all their notes or a particular note
-     name = CharField() #in the functions below we would use their name as a filter in our select()
+    name = CharField() #in the functions below we would use their name as a filter in our select()
 
 #db.create_tables([NoteTaker]) to add this table to the database
 db.create_tables([NoteTaker, User])
@@ -43,36 +43,46 @@ db.create_tables([NoteTaker, User])
 #initially, i didnt have this as a function but it makes more sense to have it as a function.
 #so we can have functions that serve as menu to view or create, creates new notes, and views notes or view particular notes
 #we also had to add the user, so we have to have a function that creates a user with the user table and adds it to the notetaker's user column
-def user():
-    new_or_old_user = input("Are a new or returning user? new/returning: ") #might change this logic b/c i feel like i'm not returning name properly
-    if new_or_old_user == 'new':
-        name = input('Type in a username: ')
-        new_user = User(name = name) #create new user
-        new_user.save() #save new user
-        return name #return name to the function
-    elif new_or_old_user = 'returning':
-        name = input('Type in your username: ')
-        your_notes = NoteTaker.select().where(NoteTaker.name == name).count() #i want to count the number of books each user has
-        print(f'You have got {your_notes} notes.') #and tell them oh you've xyz amout of books
-        return name #return name but i still feel like its not going to return to the whole function but lets see
+
+
+def find_user():
+    name = str(input("Enter your username: ")).title()  
+    print(f'Hello {name}')
+    returning = User.select().where(User.name == name)
+    if not returning : 
+        new_user = User(name=name)
+        new_user.save()
+    elif returning :
+        your_notes = NoteTaker.select().where(NoteTaker.user == name).count()#i want to count the number of books each user has
+        if your_notes >= 1:
+            print(f'Youve got {your_notes} notes.') #and tell them oh you've xyz amout of notes
+        else :
+            print("Youve got 0 notes!")   
+    return name #return name
 
 #we pass the user's username to the rest of the function to be able to access it to create a user with that user name
 def view_or_create(name): 
     note = input("view note or create new note?: ")
     if note == 'view note':
-        view_note(name)
+        your_notes = NoteTaker.select().where(NoteTaker.user == name).count()
+        if your_notes >= 1:
+            view_note(name)
+        else:
+            print("Youve got 0 notes!")
+            create_note(name)
     elif note == 'create new note':
         create_note(name)
 
 def view_note(name): 
-    searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
-    if searchEngine == 'view all':
-        all_user_notes = NoteTaker.select().where(NoteTaker.name == name) #how we get all the notes belonging to the user using select
-        print(f'{NoteTaker.name}s notes: ')
+    searchEngine = str(input("Type in note title or say view all: ")).title()    #ask for input to enable us to select() search in the next step
+    if searchEngine == 'View all':
+        all_user_notes = NoteTaker.select().where(NoteTaker.user == name) #how we get all the notes belonging to the user using select
+        print(f'{NoteTaker.user}s notes: ')
         for notes in all_user_notes: #we use a for loop to loop/map through the notes belonging to the user and print it
-            print(f'{note.date}\n{note.title}\n{note.note}') #\n makes the entry go down to the next line
+            print(f'{notes.date}\n{notes.title}\n{notes.notes}') #\n makes the entry go down to the next line
+        view_or_create(name)
     else :
-        result = NoteTaker.get(NoteTaker.title == searchEngine, NoteTaker.name == name)     
+        result = NoteTaker.get(NoteTaker.title == searchEngine, NoteTaker.user == name)     
                     #{Get} search finds a single data while {select} finds multiple
                     #above we search by note title and by the user name for a strict single result search.
                     #our first step to achieving crud.
@@ -82,9 +92,9 @@ def view_note(name):
         
         view_another = input('Would you like to view another note? Y/N: ')
         if view_another == "y":
-            view_note()
+            view_note(name)
         else :
-            view_or_create()
+           theNotes()
 
         
 
@@ -92,15 +102,20 @@ def create_note(name):
     #first step to creating a new note is to collect inputs 
     # date input below is always year, date, month in that order, also because the date a num/integer, we wrap the input in int eg.
     # int(input())
+    print(f'{name}')
     year = int(input('Enter the year like so (2012) '))
     month = int(input('Enter the month number like so (for March type 3): '))
     day = int(input('Enter the day number like so (21): '))
     # we can also ask for date input like so: date = int(input(enter date like so (1990, 11, 18))) and to get date of present time(date = datetime.datetime.now())
-    title = input('Add a title for your new note: ')
+    title = str(input('Add a title for your new note: ')).title()
     notes = input('Add some content to your note: ')
 
     # next step to bind all the entries together to make a new note in the NoteTaker db, we also call the name agruement as the name of the user
-    new_note = NoteTaker(title=title, notes=notes, date=date(year, month, day), user=name)
+    new_note = NoteTaker(
+        title=title, 
+        notes=notes, 
+        date=date(year, month, day), 
+        user=name)
 
     #next we save the new note like so:
     new_note.save() 
@@ -126,7 +141,7 @@ def create_note(name):
 def theNotes():
     print("Welcome to the theNotesCli application!")
     print("To begin, enter your username")
-    name = user()
+    name = find_user()
     view_or_create(name)
 
 theNotes() #we call theNotes function here
