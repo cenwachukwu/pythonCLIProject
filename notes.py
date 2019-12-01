@@ -111,3 +111,12 @@ def create_note(name):
     # print(f"{new_note.title}") 
     print(f"{new_note.notes}")
     print("") #for space asthetics
+
+#since we broke our code up into functions, we have to make a function to start our application
+def theNotes():
+    print("Welcome to the theNotesCli application!")
+    print("To begin, enter your username")
+    name = user()
+    view_or_create(name)
+
+theNotes() #we call theNotes function here
