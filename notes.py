@@ -44,18 +44,19 @@ db.create_tables([NoteTaker, User])
 #so we can have functions that serve as menu to view or create, creates new notes, and views notes or view particular notes
 #we also had to add the user, so we have to have a function that creates a user with the user table and adds it to the notetaker's user column
 def user():
-    new_or_old_user = input("Are a new or returning user? new/returning: ")
+    new_or_old_user = input("Are a new or returning user? new/returning: ") #might change this logic b/c i feel like i'm not returning name properly
     if new_or_old_user == 'new':
-        name = input('Type in a user name: ')
-        new_user = User(name = name)
-        new_user.save()
-        return name
+        name = input('Type in a username: ')
+        new_user = User(name = name) #create new user
+        new_user.save() #save new user
+        return name #return name to the function
     elif new_or_old_user = 'returning':
-        name = input('Type in your user name: ')
-        your_notes = NoteTaker.select().where(NoteTaker.name == name).count()
-        print(f'You have got {your_notes} notes.')
-        return name
+        name = input('Type in your username: ')
+        your_notes = NoteTaker.select().where(NoteTaker.name == name).count() #i want to count the number of books each user has
+        print(f'You have got {your_notes} notes.') #and tell them oh you've xyz amout of books
+        return name #return name but i still feel like its not going to return to the whole function but lets see
 
+#we pass the user's username to the rest of the function to be able to access it to create a user with that user name
 def view_or_create(name): 
     note = input("view note or create new note?: ")
     if note == 'view note':
@@ -63,8 +64,14 @@ def view_or_create(name):
     elif note == 'create new note':
         create_note(name)
 
-def view_note(name):
+def view_note(name): 
     searchEngine = input("Type in note title or say view all: ")    #ask for input to enable us to select() search in the next step
+    if searchEngine == 'view all':
+        all_user_notes = NoteTaker.select().where(NoteTaker.name == name).get() #how we get all the notes belonging to the user
+        print(f'{NoteTaker.name}s notes: ')
+        for notes in all_user_notes: #we use a for loop to loop/map through the notes belonging to the user and print it
+            print(f'{note.date}\n{note.title}\n{note.note}') #\n makes the entry go down to the next line
+    else :
         result = NoteTaker.select().where(NoteTaker.title == searchEngine).get()     # Get/Select request to find a note by title
                     #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
                     #our first step to achieving crud.
