@@ -20,4 +20,14 @@ class BaseModel(Model):     #this class defines a BaseModel class that sets the 
         database = db       #A Meta class is a class that describes and configures another class, 
                             #so basically to explain where exactly where our Note model 
                             #should be pulling its information from
-                            
+
+#Now that we have our BaseModel, we can define our model and have it inherit from this BaseModel class:
+# Define what a 'Note' (our model) is
+class NoteTaker(BaseModel):   
+#These are all the fields NoteTaker has, but You need to explain to peewee what the datatype in each column in the table is:
+    title = CharField()
+    date = DateField()
+    notes = CharField()
+        # both CharField() and DateField() are from PeeWee's datatypes. others are BooleanField(), IntegerField() etc.
+        # CharField() basically means that both the title and note fields are strings and 
+        # the DateField() means that the date field will take a date
