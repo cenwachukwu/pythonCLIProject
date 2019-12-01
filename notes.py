@@ -79,6 +79,11 @@ def view_note(name):
         print(result.date)
         print(result.title)
         print(result.notes)
+        view_another = input('Would you like to view another note? Y/N: ')
+        if view_another == "y":
+            view_note()
+        else :
+            view_or_create()
 
         
 
