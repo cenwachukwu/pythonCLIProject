@@ -10,3 +10,14 @@ db = PostgresqlDatabase('notetaker', user='postgres', password='',
 
 #Use db.connect() to actually connect to the database
 db.connect()
+
+#PeeWee gives us a base Model class that we can inherit from. 
+#Our model needs to define the fields for that SQL table as well as the database the table should be in 
+#(because there can be more than one).
+
+class BaseModel(Model):     #this class defines a BaseModel class that sets the database connection
+    class Meta:             
+        database = db       #A Meta class is a class that describes and configures another class, 
+                            #so basically to explain where exactly where our Note model 
+                            #should be pulling its information from
+                            
