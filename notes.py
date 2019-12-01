@@ -75,9 +75,9 @@ def view_or_create(name):
 
 def view_note(name): 
     searchEngine = str(input("Type in note title or say view all: ")).title()    #ask for input to enable us to select() search in the next step
-    if searchEngine == 'View all':
+    if searchEngine == 'View All':
         all_user_notes = NoteTaker.select().where(NoteTaker.user == name) #how we get all the notes belonging to the user using select
-        print(f'{NoteTaker.user}s notes: ')
+        print(f'{name}s notes: ')
         for notes in all_user_notes: #we use a for loop to loop/map through the notes belonging to the user and print it
             print(f'{notes.date}\n{notes.title}\n{notes.notes}') #\n makes the entry go down to the next line
         view_or_create(name)
@@ -92,31 +92,36 @@ def view_note(name):
         
         #working on update and delete:
         user_edit = str(input("Would you like to edit the post? y/n: ")).title()
-            if user_edit == 'Y':
-                user_edit2 = str(input("Would you like to Update or Delete this note? update / delete: ")).title()
-                if user_edit2 == 'Delete':
-                    result.delete_instance()
-                    print(f'{result} has been deleted')
-                elif user_edit2 == 'Update':
-                    user_update = str(input("What would you like to update? title / notes / date")).title()
-                    if user_update == 'Title':
-                        update = str(input('Update your title: ')).title()
-                        result.title = update
-                        result.save
-                    elif user_update == 'Date':
-                        update = int(input(enter date like so (1990, 11, 18)): )
-                        result.date = update
-                        result.save
-                    elif user_update == 'Notes':
-                        update = input('Add some content to your note: ')
-                        result.notes = update
-                        result.save
+        if user_edit == 'Y':
+            print(result.title)
+            user_edit2 = str(input("Would you like to Update or Delete this note? update / delete: ")).title()
+            if user_edit2 == 'Delete':
+                result.delete_instance()
+                print(f'{result} has been deleted')
+            elif user_edit2 == 'Update':
+                user_update = str(input("What would you like to update? title / notes / date")).title()
+                if user_update == 'Title':
+                    update = str(input('Update your title: ')).title()
+                    result.title = update
+                    result.save()
+                    print(f'{result} has been updated')
+                    print(result.date)
+                    print(result.title)
+                    print(result.notes)
+                elif user_update == 'Notes':
+                    update = input('Add some content to your note: ')
+                    result.notes = update
+                    result.save()
+                    print(f'{result} has been updated')
+                    print(result.date)
+                    print(result.title)
+                    print(result.notes)
 
         view_another = input('Would you like to view another note? Y/N: ')
         if view_another == "y":
             view_note(name)
         else :
-           theNotes()
+            view_or_create(name)
 
         
 
