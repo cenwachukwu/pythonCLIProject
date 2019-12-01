@@ -34,3 +34,14 @@ class NoteTaker(BaseModel):
 
 #db.create_tables([NoteTaker]) to add this table to the database
 db.create_tables([NoteTaker])
+
+# creating interactive input logic for creating the data
+note = input("view note or create new note?")
+if note == 'view note':
+    searchtitle= input("Type in title: ") #ask for input to enable us to select() search in the next step
+    result = NoteTaker.select().where(NoteTaker.title == searchtitle).get()     # Get/Select request to find a note by title
+                    #above we select from the notetakerdb, but more specifically we select from where the title == searchtitle and then get.
+                    #our first step to achieving crud.
+    print(result.date)
+    print(result.title)
+    print(result.notes)
