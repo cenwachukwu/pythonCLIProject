@@ -16,7 +16,7 @@ The users are also able to update and delete previous notes. Future plans for th
 ## Required Installations:
 * Fork and clone (or just clone) the repository
   * git clone https://github.com/cenwachukwu/pythonCLIProject.git
-  * cd into the director ie. cd pythonCLIProject
+  * cd into the directory ie. cd pythonCLIProject
 * Inside the directory install the dependencies:
   * pipenv install peewee
   * pipenv install psycopg2-binary
